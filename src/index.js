@@ -36,7 +36,7 @@ client.once("ready", async () => {
     const Guildchannel = client.channels.cache.get(channel);
     sendMeme(subreddit, Guildchannel);
   });
-  agenda.every("24 hours", "flush");
+  // agenda.every("24 hours", "flush");
 });
 
 client.login(process.env.DISCORD_TOKEN);
