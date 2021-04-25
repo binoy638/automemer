@@ -28,7 +28,16 @@ client.once("ready", async () => {
       ["memes", "Meme commands"],
       ["owner", "Owner only commands"],
     ])
-    .registerDefaults()
+    .registerDefaultTypes()
+    .registerDefaultGroups()
+    .registerDefaultCommands({
+      help: false,
+      prefix: true,
+      ping: true,
+      eval: false,
+      unknownCommand: false,
+      commandState: true,
+    })
     .registerCommandsIn(path.join(__dirname, "commands"));
   agenda.define("flush", () => {
     redisCache.flushall();
