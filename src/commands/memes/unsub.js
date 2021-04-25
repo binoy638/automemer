@@ -1,6 +1,6 @@
 const Commando = require("discord.js-commando");
 const { agenda } = require("../../config/agenda");
-
+const { unSubEmbed, unSubNAEmbed } = require("../../utils/embed");
 module.exports = class AddCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -13,12 +13,16 @@ module.exports = class AddCommand extends Commando.Command {
   }
   async run(message) {
     const { channel } = message;
+    const prefix = message.guild._commandPrefix || "#";
 
     const isRemoved = await agenda.cancel({ "data.channel": channel.id });
-
-    if (isRemoved === 0)
-      return message.reply(`automemes not activated on this channel.`);
-
-    message.reply(`automemes has been successfully deactivated.`);
+    let Embed;
+    if (isRemoved === 0) {
+      Embed = unSubNAEmbed(prefix);
+      return message.channel.send(Embed);
+    } else {
+      Embed = unSubEmbed();
+      return message.channel.send(Embed);
+    }
   }
 };

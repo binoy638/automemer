@@ -1,7 +1,12 @@
 const Commando = require("discord.js-commando");
 const Reddit = require("../../utils/reddit");
-const { convertToEmbed } = require("../../utils/helper");
 const { agenda } = require("../../config/agenda");
+const {
+  subNotAccessEmbed,
+  subEmbed,
+  subMediaEmbed,
+  subNSFWEmbed,
+} = require("../../utils/embed");
 
 module.exports = class AddCommand extends Commando.Command {
   constructor(client) {
@@ -45,30 +50,31 @@ module.exports = class AddCommand extends Commando.Command {
       return message.reply(`this command is already activated on this channel`);
     const subreddit = new Reddit(args.subreddit, "hot");
     const isValid = await subreddit.isValid();
+
     switch (isValid) {
       case 0:
-        return message.reply(`couldn't access \`r/${args.subreddit}\`.`);
+        const Embed = subNotAccessEmbed(args.subreddit);
+        return message.channel.send(Embed);
       case 1:
         createJob();
-        return message.reply(
-          `fetching from \`r/${args.subreddit}\` every \`${args.interval} minutes\``
-        );
+        const Embed1 = subEmbed(args.subreddit, args.interval);
+        return message.channel.send(Embed1);
       case 2:
-        return message.reply(
-          `r/${args.subreddit} doesn't have enough media for me to fetch.`
-        );
+        const Embed2 = subMediaEmbed(args.subreddit);
+        return message.channel.send(Embed2);
       case 3:
         if (channel.nsfw) {
           createJob();
-          return message.reply(
-            `fetching from \`r/${args.subreddit}\` every \`${args.interval} minutes\``
-          );
-        } else
-          return message.reply(
-            `\`r/${args.subreddit}\` is NSFW, make sure this is a NSFW channel before using this command again.`
-          );
+          const Embed3 = subEmbed(args.subreddit, args.interval);
+          return message.channel.send(Embed3);
+        } else {
+          const Embed4 = subNSFWEmbed(args.subreddit);
+          return message.channel.send(Embed4);
+        }
+
       default:
-        return message.reply(`couldn't access \`r/${args.subreddit}\`.`);
+        const Embed5 = subNotAccessEmbed(args.subreddit);
+        return message.channel.send(Embed5);
     }
   }
 };

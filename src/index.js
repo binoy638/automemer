@@ -42,4 +42,9 @@ client.once("ready", async () => {
   // agenda.every("24 hours", "flush");
 });
 
+client.on("guildDelete", async (guild) => {
+  await agenda.cancel({ name: "autoposts", "data.guild": guild.id });
+  console.log(`Autoposts jobs deleted for guild ${guild.id}`);
+});
+
 client.login(process.env.DISCORD_TOKEN);
