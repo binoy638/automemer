@@ -31,6 +31,16 @@ module.exports = class AddCommand extends Commando.Command {
     const { channel } = message;
     const isExists = await agenda.jobs({ "data.channel": channel.id });
 
+    const createJob = () => {
+      const job = agenda.create("autoposts", {
+        channel: channel.id,
+        guild: channel.guild.id,
+        subreddit: args.subreddit,
+      });
+      job.repeatEvery(`${args.interval} minutes`);
+      job.save();
+    };
+
     if (isExists.length)
       return message.reply(`this command is already activated on this channel`);
     const subreddit = new Reddit(args.subreddit, "hot");
@@ -39,13 +49,7 @@ module.exports = class AddCommand extends Commando.Command {
       case 0:
         return message.reply(`couldn't access \`r/${args.subreddit}\`.`);
       case 1:
-        const job = agenda.create("autoposts", {
-          channel: channel.id,
-          guild: channel.guild.id,
-          subreddit: args.subreddit,
-        });
-        job.repeatEvery(`${args.interval} minutes`);
-        job.save();
+        createJob();
         return message.reply(
           `fetching from \`r/${args.subreddit}\` every \`${args.interval} minutes\``
         );
@@ -54,8 +58,15 @@ module.exports = class AddCommand extends Commando.Command {
           `r/${args.subreddit} doesn't have enough media for me to fetch.`
         );
       case 3:
-        //TODO
-        return message.reply(`\`r/${args.subreddit}\` is NSFW`);
+        if (channel.nsfw) {
+          createJob();
+          return message.reply(
+            `fetching from \`r/${args.subreddit}\` every \`${args.interval} minutes\``
+          );
+        } else
+          return message.reply(
+            `\`r/${args.subreddit}\` is NSFW, make sure this is a NSFW channel before using this command again.`
+          );
       default:
         return message.reply(`couldn't access \`r/${args.subreddit}\`.`);
     }

@@ -24,7 +24,10 @@ client
 client.once("ready", async () => {
   console.log(`${client.user.username} is ready!`);
   client.registry
-    .registerGroups([["memes", "Meme commands"]])
+    .registerGroups([
+      ["memes", "Meme commands"],
+      ["owner", "Owner only commands"],
+    ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, "commands"));
   agenda.define("flush", () => {

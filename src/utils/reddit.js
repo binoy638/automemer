@@ -42,7 +42,7 @@ class Reddit {
           post_hint: post.data.post_hint,
           title: post.data.title,
           url: post.data.url_overridden_by_dest,
-          permaLink: `https://www.reddit.com/${post.data.permalink}`,
+          permalink: `https://www.reddit.com${post.data.permalink}`,
           media: extractVideoUrl(post.data.media),
           is_video: post.data.is_video,
         }));

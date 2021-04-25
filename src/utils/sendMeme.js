@@ -20,9 +20,15 @@ module.exports = async (subredditTitle, channel) => {
     posts = JSON.parse(posts);
   }
 
+  //getting the first post from the list of posts and removing it from the rest
   const post = posts.shift();
 
-  redisCache.set(`${channel.id}-${subredditTitle}`, JSON.stringify(posts));
+  //checking there are more posts left
+  if (posts.length > 0) {
+    redisCache.set(`${channel.id}-${subredditTitle}`, JSON.stringify(posts));
+  } else {
+    redisCache.del(`${channel.id}-${subredditTitle}`);
+  }
 
   let Embed;
   if (post.is_video) {
