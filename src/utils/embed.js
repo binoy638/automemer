@@ -1,21 +1,21 @@
 const { MessageEmbed } = require("discord.js");
 
-const convertToEmbed = (post, type = "image") => {
+const RedditImageEmbed = (post) => {
   if (!post) return null;
-  let Embed;
-  if (type === "image") {
-    Embed = new MessageEmbed()
-      .setColor("RANDOM")
-      .setTitle(post.title)
-      .setURL(post.permalink)
-      .setImage(post.url);
-  } else {
-    Embed = new MessageEmbed()
-      .setColor("RANDOM")
-      .setTitle(post.title)
-      .setURL(post.permalink);
-  }
+  const Embed = new MessageEmbed()
+    .setColor("black")
+    .setTitle(post.title)
+    .setURL(post.permalink)
+    .setImage(post.url);
+  return Embed;
+};
 
+const RedditVideoEmbed = (post) => {
+  if (!post) return null;
+  const Embed = new MessageEmbed()
+    .setColor("black")
+    .setTitle(post.title)
+    .setURL(post.permalink);
   return Embed;
 };
 
@@ -93,4 +93,6 @@ module.exports = {
   subNotAccessEmbed,
   unSubEmbed,
   unSubNAEmbed,
+  RedditImageEmbed,
+  RedditVideoEmbed,
 };

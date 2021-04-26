@@ -26,7 +26,7 @@ module.exports = class AddCommand extends Commando.Command {
           key: "interval",
           prompt: "Please enter a id.",
           type: "integer",
-          min: 1,
+          min: 10,
           max: 1440,
         },
       ],

@@ -1,7 +1,7 @@
 const { redisCache } = require("../config/cache");
 const { promisify } = require("util");
 const getCacheAsync = promisify(redisCache.get).bind(redisCache);
-const { convertToEmbed: RedditEmbed } = require("./helper");
+const { RedditImageEmbed, RedditVideoEmbed } = require("./embed");
 const Reddit = require("./reddit");
 
 module.exports = async (subredditTitle, channel) => {
@@ -31,16 +31,28 @@ module.exports = async (subredditTitle, channel) => {
   }
 
   let Embed;
-  if (post.is_video) {
-    Embed = RedditEmbed(post, "video");
-    if (!Embed)
-      return channel.send("Something went wrong.Please try again later.");
+  if (post.is_video === true) {
+    Embed = RedditVideoEmbed(post);
+    if (!Embed) {
+      console.log(post);
+      return channel.send("Something went wrong.");
+    }
     channel.send(Embed);
     channel.send(post.media);
+  } else if (post.post_hint === "link" || post.post_hint === "rich:video") {
+    Embed = RedditVideoEmbed(post);
+    if (!Embed) {
+      console.log(post);
+      return channel.send("Something went wrong.");
+    }
+    channel.send(Embed);
+    channel.send(post.url);
   } else {
-    Embed = RedditEmbed(post);
-    if (!Embed)
-      return channel.send("Something went wrong.Please try again later.");
+    Embed = RedditImageEmbed(post);
+    if (!Embed) {
+      console.log(post);
+      return channel.send("Something went wrong.");
+    }
     channel.send(Embed);
   }
 };
