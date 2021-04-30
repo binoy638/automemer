@@ -36,7 +36,7 @@ class Reddit {
           (item) =>
             item.data.url_overridden_by_dest !== undefined &&
             item.data.post_hint !== undefined &&
-            item.data.post_hint !== "link"
+            item.data.post_hint !== "rich:video"
         )
         .map((post) => ({
           id: post.data.id,
