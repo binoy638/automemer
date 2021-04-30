@@ -35,7 +35,8 @@ class Reddit {
         .filter(
           (item) =>
             item.data.url_overridden_by_dest !== undefined &&
-            item.data.post_hint !== undefined
+            item.data.post_hint !== undefined &&
+            item.data.post_hint !== "link"
         )
         .map((post) => ({
           id: post.data.id,
