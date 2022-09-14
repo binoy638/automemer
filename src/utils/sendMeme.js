@@ -9,8 +9,8 @@ module.exports = async (subredditArray, channel) => {
   let posts = await getCacheAsync(`${channel.id}`);
   if (!posts) {
     const Promises = subredditArray.map((subreddit) => {
-      const subreddit = new Reddit(subreddit, "hot");
-      return subreddit.getPosts();
+      const _subreddit = new Reddit(subreddit, "hot");
+      return _subreddit.getPosts();
     });
     const postsArray = await Promise.all(Promises);
     if (postsArray.length > 0) {
