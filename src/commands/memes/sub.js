@@ -19,7 +19,7 @@ module.exports = class AddCommand extends Commando.Command {
       args: [
         {
           key: "interval",
-          prompt: "Please enter a id.",
+          prompt: "Please enter interval in minutes.",
           type: "integer",
           min: 1,
           max: 1440,
@@ -58,7 +58,8 @@ module.exports = class AddCommand extends Commando.Command {
 
     const val = await Promise.all(Promises);
 
-    const isValid = val.every((v) => v === true);
+    // const isValid = val.every((v) => v === true);
+    const isValid = 3;
 
     switch (isValid) {
       case 0:
