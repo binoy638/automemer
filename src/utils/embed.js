@@ -32,38 +32,37 @@ const statsEmbed = (appMem, sysMem, sysFreeMem) => {
 };
 
 const subEmbed = (subreddit, interval) => {
+  const sub = subreddit.join(", ");
   const Embed = new MessageEmbed().setColor("black").setTitle("✅ Subscribed")
-    .setDescription(`Subreddit: \`${subreddit}\`\n
+    .setDescription(`Subreddit: \`${sub}\`\n
     Interval: \`${interval} minutes\`
     `);
   return Embed;
 };
 
-const subNSFWEmbed = (subreddit) => {
+const subNSFWEmbed = () => {
   const Embed = new MessageEmbed()
     .setColor("black")
     .setTitle("🔞 NSFW Subreddit Detected")
-    .setDescription(
-      `\`r/${subreddit}\` is NSFW.\nEnable NSFW in the channel's settings and try again.`
-    );
+    .setDescription(`Enable NSFW in the channel's settings and try again.`);
   return Embed;
 };
 
-const subMediaEmbed = (subreddit) => {
+const subMediaEmbed = () => {
   const Embed = new MessageEmbed()
     .setColor("black")
     .setTitle("❌ Not enough media content.")
-    .setDescription(`It seems that \`r/${subreddit}\` doesn't have enough media submissions please select a subreddit with enough media contents.
+    .setDescription(`It seems that one or more subreddits doesn't have enough media submissions please select a subreddit with enough media contents.
     `);
   return Embed;
 };
 
-const subNotAccessEmbed = (subreddit) => {
+const subNotAccessEmbed = () => {
   const Embed = new MessageEmbed()
     .setColor("black")
     .setTitle("❌ Subreddit unavailable.")
     .setDescription(
-      `unable to access \`r/${subreddit}\` make sure it is spelled correctly and try again.`
+      `unable to access one or more subreddits make sure it is spelled correctly and try again.`
     );
   return Embed;
 };

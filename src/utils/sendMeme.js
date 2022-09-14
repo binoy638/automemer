@@ -3,14 +3,21 @@ const { promisify } = require("util");
 const getCacheAsync = promisify(redisCache.get).bind(redisCache);
 const { RedditImageEmbed, RedditVideoEmbed } = require("./embed");
 const Reddit = require("./reddit");
+const { flattenArray, shuffleArray } = require("./helper");
 
-module.exports = async (subredditTitle, channel) => {
-  let posts = await getCacheAsync(`${channel.id}-${subredditTitle}`);
+module.exports = async (subredditArray, channel) => {
+  let posts = await getCacheAsync(`${channel.id}`);
   if (!posts) {
-    const subreddit = new Reddit(subredditTitle, "hot");
-    posts = await subreddit.getPosts(50);
-    if (posts)
-      redisCache.set(`${channel.id}-${subredditTitle}`, JSON.stringify(posts));
+    const Promises = subredditArray.map((subreddit) => {
+      const subreddit = new Reddit(subreddit, "hot");
+      return subreddit.getPosts();
+    });
+    const postsArray = await Promise.all(Promises);
+    if (postsArray.length > 0) {
+      const flattenPosts = flattenArray(postsArray);
+      posts = shuffleArray(flattenPosts);
+    }
+    if (posts) redisCache.set(`${channel.id}`, JSON.stringify(posts));
   }
 
   if (!posts)
@@ -25,9 +32,9 @@ module.exports = async (subredditTitle, channel) => {
 
   //checking there are more posts left
   if (posts.length > 0) {
-    redisCache.set(`${channel.id}-${subredditTitle}`, JSON.stringify(posts));
+    redisCache.set(`${channel.id}`, JSON.stringify(posts));
   } else {
-    redisCache.del(`${channel.id}-${subredditTitle}`);
+    redisCache.del(`${channel.id}`);
   }
 
   let Embed;

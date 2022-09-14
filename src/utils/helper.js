@@ -16,7 +16,15 @@ const shuffleArray = (arr = []) => {
   return arr;
 };
 
+const flattenArray = (arr = []) => {
+  return arr.map((item) => {
+    if (typeof item === "string") return item;
+    return [...item];
+  });
+};
+
 module.exports = {
   extractVideoUrl,
   shuffleArray,
+  flattenArray,
 };
