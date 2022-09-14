@@ -18,16 +18,16 @@ module.exports = class AddCommand extends Commando.Command {
       userPermissions: ["ADMINISTRATOR"],
       args: [
         {
-          key: "subreddits",
-          prompt: "Enter subreddit names seperated with commas.",
-          type: "string",
-        },
-        {
           key: "interval",
           prompt: "Please enter a id.",
           type: "integer",
           min: 1,
           max: 1440,
+        },
+        {
+          key: "subreddits",
+          prompt: "Enter subreddit names seperated with commas.",
+          type: "string",
         },
       ],
     });
