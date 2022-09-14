@@ -57,7 +57,6 @@ module.exports = class AddCommand extends Commando.Command {
     });
 
     const val = await Promise.all(Promises);
-
     // const isValid = val.every((v) => v === true);
     const isValid = 3;
 

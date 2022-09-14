@@ -20,8 +20,7 @@ module.exports = async (subredditArray, channel) => {
     if (posts) redisCache.set(`${channel.id}`, JSON.stringify(posts));
   }
 
-  if (!posts)
-    return channel.send(`could not fetch posts from \`r/${subredditTitle}\`.`);
+  if (!posts) return channel.send(`could not fetch posts .`);
 
   if (typeof posts === "string") {
     posts = JSON.parse(posts);

@@ -17,10 +17,7 @@ const shuffleArray = (arr = []) => {
 };
 
 const flattenArray = (arr = []) => {
-  return arr.map((item) => {
-    if (typeof item === "string") return item;
-    return [...item];
-  });
+  return arr.reduce((acc, val) => acc.concat(val), []);
 };
 
 module.exports = {
