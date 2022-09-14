@@ -52,8 +52,8 @@ module.exports = class AddCommand extends Commando.Command {
       return message.reply(`this command is already activated on this channel`);
 
     const Promises = subreddits.map((subreddit) => {
-      const subreddit = new Reddit(subreddit, "hot");
-      return subreddit.isValid();
+      const _subreddit = new Reddit(subreddit, "hot");
+      return _subreddit.isValid();
     });
 
     const val = await Promise.all(Promises);
