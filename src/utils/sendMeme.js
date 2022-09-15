@@ -14,7 +14,7 @@ module.exports = async (subredditArray, channel) => {
     });
     const postsArray = await Promise.all(Promises);
     if (postsArray.length > 0) {
-      const flattenPosts = flattenArray(postsArray);
+      const flattenPosts = postsArray.flat();
       posts = shuffleArray(flattenPosts);
     }
     if (posts) redisCache.set(`${channel.id}`, JSON.stringify(posts));

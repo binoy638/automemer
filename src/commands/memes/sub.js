@@ -57,19 +57,40 @@ module.exports = class AddCommand extends Commando.Command {
     });
 
     const val = await Promise.all(Promises);
-    // const isValid = val.every((v) => v === true);
-    const isValid = 3;
+
+    let isValid = 1;
+
+    for (let i = 0; i < val.length; i++) {
+      if (val[i] === 0 || val[i] === 2) {
+        isValid = val[i];
+        break;
+      }
+      if (val[i] === 1 || val[i] === 3) {
+        isValid = val[i];
+      }
+    }
+
+    if (isValid === 1 || isValid === 3) {
+      const isNSFW = val.some((v) => v === 3);
+      if (isNSFW) {
+        isValid = 3;
+      }
+    }
 
     switch (isValid) {
       case 0:
-        const Embed = subNotAccessEmbed();
+        const notAccessableSubs = subreddits
+          .filter((_, i) => val[i] === 0)
+          .join();
+        const Embed = subNotAccessEmbed(notAccessableSubs);
         return message.channel.send(Embed);
       case 1:
         createJob();
         const Embed1 = subEmbed(subreddits, args.interval);
         return message.channel.send(Embed1);
       case 2:
-        const Embed2 = subMediaEmbed();
+        const noMediaSubs = subreddits.filter((_, i) => val[i] === 2).join();
+        const Embed2 = subMediaEmbed(noMediaSubs);
         return message.channel.send(Embed2);
       case 3:
         if (channel.nsfw) {
@@ -77,7 +98,8 @@ module.exports = class AddCommand extends Commando.Command {
           const Embed3 = subEmbed(subreddits, args.interval);
           return message.channel.send(Embed3);
         } else {
-          const Embed4 = subNSFWEmbed();
+          const nsfwSubs = subreddits.filter((_, i) => val[i] === 3).join();
+          const Embed4 = subNSFWEmbed(nsfwSubs);
           return message.channel.send(Embed4);
         }
 

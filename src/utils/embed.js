@@ -40,29 +40,29 @@ const subEmbed = (subreddit, interval) => {
   return Embed;
 };
 
-const subNSFWEmbed = () => {
+const subNSFWEmbed = (subs) => {
   const Embed = new MessageEmbed()
     .setColor("black")
-    .setTitle("🔞 NSFW Subreddit Detected")
+    .setTitle(`🔞 NSFW Subreddit Detected ${subs}`)
     .setDescription(`Enable NSFW in the channel's settings and try again.`);
   return Embed;
 };
 
-const subMediaEmbed = () => {
+const subMediaEmbed = (subs) => {
   const Embed = new MessageEmbed()
     .setColor("black")
     .setTitle("❌ Not enough media content.")
-    .setDescription(`It seems that one or more subreddits doesn't have enough media submissions please select a subreddit with enough media contents.
+    .setDescription(`It seems that \`${subs}\` doesn't have enough media submissions please select a subreddit with enough media contents.
     `);
   return Embed;
 };
 
-const subNotAccessEmbed = () => {
+const subNotAccessEmbed = (subs) => {
   const Embed = new MessageEmbed()
     .setColor("black")
     .setTitle("❌ Subreddit unavailable.")
     .setDescription(
-      `unable to access one or more subreddits make sure it is spelled correctly and try again.`
+      `unable to access \`${subs}\` make sure it is spelled correctly and try again.`
     );
   return Embed;
 };
