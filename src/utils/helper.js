@@ -19,5 +19,4 @@ const shuffleArray = (arr = []) => {
 module.exports = {
   extractVideoUrl,
   shuffleArray,
-  flattenArray,
 };
