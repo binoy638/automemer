@@ -3,7 +3,7 @@ const { promisify } = require("util");
 const getCacheAsync = promisify(redisCache.get).bind(redisCache);
 const { RedditImageEmbed, RedditVideoEmbed } = require("./embed");
 const Reddit = require("./reddit");
-const { flattenArray, shuffleArray } = require("./helper");
+const { shuffleArray } = require("./helper");
 
 module.exports = async (subredditArray, channel) => {
   let posts = await getCacheAsync(`${channel.id}`);
