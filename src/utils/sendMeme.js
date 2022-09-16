@@ -5,9 +5,41 @@ const { RedditImageEmbed, RedditVideoEmbed } = require("./embed");
 const Reddit = require("./reddit");
 const { shuffleArray } = require("./helper");
 
+const getPost = async (postList) => {
+  const post = postList.shift();
+
+  let postHashMap = await getCacheAsync("postHashMap");
+  // if postHashMap doesn't exists then create it
+  if (!postHashMap) {
+    postHashMap = {
+      [post.id]: 1,
+    };
+
+    redisCache.set("postHashMap", JSON.stringify(postHashMap));
+    return post;
+  }
+
+  try {
+    const parsedJson = JSON.parse(postHashMap);
+    postHashMap = parsedJson;
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (postHashMap[post.id]) {
+    return getPost(postList);
+  }
+  // add the post id to the hashmap and return it
+  postHashMap = { ...postHashMap, [post.id]: 1 };
+  console.log(postHashMap);
+  redisCache.set("postHashMap", JSON.stringify(postHashMap));
+  return post;
+};
+
 module.exports = async (subredditArray, channel) => {
   let posts = await getCacheAsync(`${channel.id}`);
   if (!posts) {
+    console.log("no posts found, fetching new posts");
     const Promises = subredditArray.map((subreddit) => {
       const _subreddit = new Reddit(subreddit, "hot");
       return _subreddit.getPosts();
@@ -27,7 +59,7 @@ module.exports = async (subredditArray, channel) => {
   }
 
   //getting the first post from the list of posts and removing it from the rest
-  const post = posts.shift();
+  const post = await getPost(posts);
 
   //checking there are more posts left
   if (posts.length > 0) {

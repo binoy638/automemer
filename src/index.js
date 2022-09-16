@@ -48,12 +48,20 @@ client.once("ready", async () => {
     const Guildchannel = client.channels.cache.get(channel);
     sendMeme(subreddit, Guildchannel);
   });
-  // agenda.every("24 hours", "flush");
+
+  //check if cache flush job is already scheduled
+  const isFlushExists = await agenda.jobs({ name: "flush" });
+
+  if (isFlushExists.length === 0) {
+    const flushJob = agenda.create("flush");
+    flushJob.repeatEvery("1 week");
+    flushJob.save();
+  }
 });
 
 client.on("guildDelete", async (guild) => {
   await agenda.cancel({ name: "autoposts", "data.guild": guild.id });
   console.log(`Autoposts jobs deleted for guild ${guild.id}`);
 });
-
+redisCache.flushall();
 client.login(process.env.DISCORD_TOKEN);

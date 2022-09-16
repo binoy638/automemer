@@ -20,7 +20,7 @@ class Reddit {
       }
     } catch (error) {
       console.log(error);
-      return undefined;
+      return 0;
     }
   }
 

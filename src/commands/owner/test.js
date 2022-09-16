@@ -1,5 +1,8 @@
 const Commando = require("discord.js-commando");
 const { MessageEmbed } = require("discord.js");
+const { promisify } = require("util");
+const { redisCache } = require("../../config/cache");
+const getCacheAsync = promisify(redisCache.get).bind(redisCache);
 module.exports = class AddCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -11,12 +14,16 @@ module.exports = class AddCommand extends Commando.Command {
     });
   }
   async run(message, args) {
-    const Embed = new MessageEmbed()
-      .setColor("RANDOM")
-      .setTitle("Title")
-      .setImage(
-        "https://thisiscolossal.com/wp-content/uploads/2018/04/agif1opt.gif"
-      );
-    message.channel.send(Embed);
+    redisCache.setex("hi", 10, "hello");
+
+    const val = await getCacheAsync("hi");
+
+    setTimeout(async () => {
+      const val = await getCacheAsync("hi");
+
+      console.log(val);
+    }, 9000);
+
+    message.channel.send("yo");
   }
 };
