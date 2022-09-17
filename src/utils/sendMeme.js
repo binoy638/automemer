@@ -31,7 +31,6 @@ const getPost = async (postList) => {
   }
   // add the post id to the hashmap and return it
   postHashMap = { ...postHashMap, [post.id]: 1 };
-  console.log(postHashMap);
   redisCache.set("postHashMap", JSON.stringify(postHashMap));
   return post;
 };
