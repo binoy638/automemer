@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "agenda": "^4.1.2",
+    "agenda": "^4.3.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.1.0",
     "discord.js": "^12.5.3",
