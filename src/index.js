@@ -63,5 +63,5 @@ client.on("guildDelete", async (guild) => {
   await agenda.cancel({ name: "autoposts", "data.guild": guild.id });
   console.log(`Autoposts jobs deleted for guild ${guild.id}`);
 });
-redisCache.flushall();
+//redisCache.flushall();
 client.login(process.env.DISCORD_TOKEN);
